@@ -1,0 +1,60 @@
+html{
+  background-color: grey;
+}
+
+#grid-container{
+  display: grid;
+  grid-template-columns: 2;
+  border: black solid 2px;
+  justify-content: center;
+  padding-left: 20%;
+  padding-right: 20%;
+  padding-top: 5%;
+}
+
+#left-content{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  grid-column: 1;
+  border: red solid 2px;
+  width: 25vw;
+  height: 80vh;
+  text-align: center;
+}
+
+#right-content{
+  display: flex;
+  flex-direction: column;
+  grid-column: 2;
+  border: blue solid 2px;
+  width: 65vw;
+  height: 80vh;
+  text-align: center;
+}
+
+#left-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#left-form input, #left-form select, #left-form label {
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+#task-description{
+  height: 100px;
+}
+
+img{
+  height: 50px;
+  width: 50px;
+}
+
+#task-card{
+  display: flex;
+  border: 2px green solid;
+}
