@@ -59,3 +59,15 @@ img{
   display: flex;
   border: 2px green solid;
 }
+
+#task-card:hover{
+  background-color: rgb(185, 185, 185);
+}
+
+#modify-task-popup{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  gap: 10px;
+}

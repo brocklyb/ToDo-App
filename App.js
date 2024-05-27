@@ -24,7 +24,7 @@ function App() {
 
   const deleteTask = (taskID) =>{
     let findTask = allTasks.findIndex((value) => locateTask(value, taskID));
-    let newAllTasks = allTasks.filter((item, index) => {return index != findTask})
+    let newAllTasks = allTasks.filter((item, index) => {return index !== findTask})
     for(let i in allTasks){
       allTasks.pop()
     }
@@ -32,15 +32,15 @@ function App() {
   }
 
   const locateTask = (value, taskID) =>{
-    //console.log(value)
     return value.newTask.taskID === taskID;
   }
 
-  const selectedTask = useRef(undefined)
+  const [ selectedTask, setSelectedTask ] = useState()
   const modifyTask = (taskID) =>{
-    selectedTask.current = taskID
     let findTask = allTasks.findIndex((value) => locateTask(value, taskID));
-    //toggleModifyRecordPopup()
+    setSelectedTask(allTasks[findTask])
+    //console.log(allTasks[findTask])
+    console.log(selectedTask)
   }
 
   const modifyTaskRef = useRef(null)
@@ -57,11 +57,27 @@ function App() {
     <div id='root-container'>
 
       <dialog ref={modifyTaskRef}>
-         <div id='popup-container'>
-             <h1>Modify Task {selectedTask.current}</h1>
-             <button style={{backgroundColor: 'red'}} onClick={toggleModifyRecordPopup}>Cancel</button>
-         </div>
-     </dialog>
+        <div id='popup-container'>
+              {selectedTask && selectedTask.newTask && selectedTask.newTask.taskID ? (
+                <div id='modify-task-popup'>
+                  <h1>Modify Task - {selectedTask.newTask.taskID}</h1>
+                  <label>Task Name: </label><input type='text' placeholder={selectedTask.newTask.taskName}></input>
+                  <label/>Priority<select id="task-priority">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                  <label>Task Description: </label><input type='text' placeholder={selectedTask.newTask.taskDescription}></input>
+                  <label>Task Due Date: </label><input type='date'></input>
+                </div>  
+              ) : (
+                <h1>No Task Selected</h1>
+              )}
+          <button style={{backgroundColor: 'red'}} onClick={toggleModifyRecordPopup}>Cancel</button>
+        </div>
+      </dialog>
 
       <div id='grid-container'>
         <div id='left-content'>
@@ -83,7 +99,7 @@ function App() {
 
         <div id='right-content'>
           <h1>Right Side</h1>
-          {allTasks.length < 1 ? (<h1>No Data</h1>) : allTasks.map((item, index) =>{
+          {allTasks.length < 1 ? (<h1>Zero Tasks, Congrats!</h1>) : allTasks.map((item, index) =>{
             return (
               <div id='task-card' key={item.newTask.taskID}>
                 <h1>Task: {item.newTask.taskName}</h1>
@@ -91,7 +107,7 @@ function App() {
                 <h1>Description: {item.newTask.taskDescription}</h1>
                 <h1>Due Date: {item.newTask.taskDueDate}</h1>
                 <h1>Task ID: {item.newTask.taskID}</h1>
-                <img onClick={() => modifyTask(item.newTask.taskID)} onClick={() => toggleModifyRecordPopup()} src={item.newTask.updateIcon} alt='Failed to load'></img>
+                <img onClick={() => modifyTask(item.newTask.taskID) + toggleModifyRecordPopup()} src={item.newTask.updateIcon} alt='Failed to load'></img>
                 <img onClick={() => deleteTask(item.newTask.taskID)} src={item.newTask.deleteIcon} alt='Failed to load'></img>
               </div>
             )
