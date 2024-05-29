@@ -14,7 +14,7 @@ function App() {
     let taskDescription = document.getElementById("task-description").value
     let taskDueDate = document.getElementById("task-dueDate").value
     let taskID = taskPriority + (Math.floor(Math.random() * 900) + 100) 
-    setNewTask({taskName,taskPriority,taskDescription,taskDueDate, taskID, updateIcon, deleteIcon})
+    setNewTask({taskName,taskPriority,taskDescription,taskDueDate, taskID, updateIcon, deleteIcon, isComplete: false})
   }
 
   const setNewTask = (newTask) =>{
@@ -22,6 +22,7 @@ function App() {
     //console.log(allTasks)
   }
 
+  //delete task 
   const deleteTask = (taskID) =>{
     let findTask = allTasks.findIndex((value) => locateTask(value, taskID));
     let newAllTasks = allTasks.filter((item, index) => {return index !== findTask})
@@ -31,16 +32,33 @@ function App() {
     setAllTasks(newAllTasks)
   }
 
+  //looksup where the object inside the array is stored
+  //returns a number indicating the position for refernce
   const locateTask = (value, taskID) =>{
     return value.newTask.taskID === taskID;
   }
 
+  //this usestate stores the selected task that is potentially being modified
+  //saves
   const [ selectedTask, setSelectedTask ] = useState()
   const modifyTask = (taskID) =>{
     let findTask = allTasks.findIndex((value) => locateTask(value, taskID));
     setSelectedTask(allTasks[findTask])
     //console.log(allTasks[findTask])
-    console.log(selectedTask)
+    //console.log(selectedTask)
+  }
+
+  const updateTask = (taskID) =>{
+    //console.log(taskID)
+    let findTask = allTasks.findIndex((value) => locateTask(value, taskID));
+    //console.log(selectedTask)
+    let taskName = document.getElementById("task-name").value
+    let taskPriority = document.getElementById("task-priority").value
+    let taskDescription = document.getElementById("task-description").value
+    let taskDueDate = document.getElementById("task-due-date").value
+    let isTaskComplete = document.getElementById("task-isComplete")
+    let modifiedNewTask = {taskName, taskPriority, taskDescription, taskDueDate, isTaskComplete}
+    console.log(modifiedNewTask)
   }
 
   const modifyTaskRef = useRef(null)
@@ -61,7 +79,7 @@ function App() {
               {selectedTask && selectedTask.newTask && selectedTask.newTask.taskID ? (
                 <div id='modify-task-popup'>
                   <h1>Modify Task - {selectedTask.newTask.taskID}</h1>
-                  <label>Task Name: </label><input type='text' placeholder={selectedTask.newTask.taskName}></input>
+                  <label>Task Name: </label><input type='text' id='task-name' placeholder={selectedTask.newTask.taskName}></input>
                   <label/>Priority<select id="task-priority">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -69,13 +87,15 @@ function App() {
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </select>
-                  <label>Task Description: </label><input type='text' placeholder={selectedTask.newTask.taskDescription}></input>
-                  <label>Task Due Date: </label><input type='date'></input>
+                  <label>Task Description: </label><input type='text' id='task-description' placeholder={selectedTask.newTask.taskDescription}></input>
+                  <label>Task Due Date: </label><input id='task-due-date' type='date'></input>
+                  <label>Task Complete?</label><input type='checkbox' id='task-isComplete'></input>
                 </div>  
               ) : (
                 <h1>No Task Selected</h1>
               )}
           <button style={{backgroundColor: 'red'}} onClick={toggleModifyRecordPopup}>Cancel</button>
+          <button style={{backgroundColor: 'green'}} onClick={() => updateTask(selectedTask.newTask.taskID)}>Submit</button>
         </div>
       </dialog>
 
