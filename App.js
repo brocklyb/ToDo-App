@@ -3,6 +3,7 @@ import updateIcon from './images/update.svg'
 import deleteIcon from './images/delete.svg'
 
 import { useState, useRef, useEffect } from 'react';
+import { type } from '@testing-library/user-event/dist/type';
 
 function App() {
   const [ allTasks, setAllTasks ] = useState([]) 
@@ -32,6 +33,13 @@ function App() {
     setAllTasks(newAllTasks)
   }
 
+  const clearAllTasks = () =>{
+    //console.log(allTasks)
+    for(let i in allTasks){
+      allTasks.pop()
+    }
+  }
+
   //looksup where the object inside the array is stored
   //returns a number indicating the position for refernce
   const locateTask = (value, taskID) =>{
@@ -49,16 +57,28 @@ function App() {
   }
 
   const updateTask = (taskID) =>{
-    //console.log(taskID)
     let findTask = allTasks.findIndex((value) => locateTask(value, taskID));
-    //console.log(selectedTask)
+   
     let taskName = document.getElementById("task-name").value
     let taskPriority = document.getElementById("task-priority").value
     let taskDescription = document.getElementById("task-description").value
     let taskDueDate = document.getElementById("task-due-date").value
     let isTaskComplete = document.getElementById("task-isComplete")
-    let modifiedNewTask = {taskName, taskPriority, taskDescription, taskDueDate, isTaskComplete}
-    console.log(modifiedNewTask)
+
+    let modifiedNewTask = {taskName, taskPriority, taskDescription, taskDueDate, taskID, updateIcon, deleteIcon, isTaskComplete}
+
+    let newAllTasks = allTasks.filter((item, index) => {return item.newTask.taskID !== taskID})
+
+    let newAllTasksArray = []
+
+    newAllTasks.map((item) => newAllTasksArray.push(item))
+
+    newAllTasksArray.push({newTask: modifiedNewTask})
+   
+    setAllTasks(newAllTasksArray)
+
+    
+    toggleModifyRecordPopup()
   }
 
   const modifyTaskRef = useRef(null)
