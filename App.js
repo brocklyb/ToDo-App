@@ -63,7 +63,7 @@ function App() {
     let taskPriority = document.getElementById("task-priority").value
     let taskDescription = document.getElementById("task-description").value
     let taskDueDate = document.getElementById("task-due-date").value
-    let isTaskComplete = document.getElementById("task-isComplete")
+    let isTaskComplete = document.getElementById("task-isComplete").value
 
     let modifiedNewTask = {taskName, taskPriority, taskDescription, taskDueDate, taskID, updateIcon, deleteIcon, isTaskComplete}
 
@@ -74,9 +74,10 @@ function App() {
     newAllTasks.map((item) => newAllTasksArray.push(item))
 
     newAllTasksArray.push({newTask: modifiedNewTask})
-   
-    setAllTasks(newAllTasksArray)
+    
+    //console.log(newAllTasksArray.forEach((item) => item.locateTask()))
 
+    setAllTasks(newAllTasksArray)
     
     toggleModifyRecordPopup()
   }
@@ -118,7 +119,6 @@ function App() {
           <button style={{backgroundColor: 'green'}} onClick={() => updateTask(selectedTask.newTask.taskID)}>Submit</button>
         </div>
       </dialog>
-
       <div id='grid-container'>
         <div id='left-content'>
           <h1>Left Side</h1>
@@ -139,16 +139,17 @@ function App() {
 
         <div id='right-content'>
           <h1>Right Side</h1>
-          {allTasks.length < 1 ? (<h1>Zero Tasks, Congrats!</h1>) : allTasks.map((item, index) =>{
+          {allTasks.length < 1 ? (<div><h1>Zero Tasks, Congrats!</h1><h1>Create a task in the left panel</h1></div>) : allTasks.map((item, index) =>{
             return (
               <div id='task-card' key={item.newTask.taskID}>
-                <h1>Task: {item.newTask.taskName}</h1>
-                <h1>Priority: {item.newTask.taskPriority}</h1>
-                <h1>Description: {item.newTask.taskDescription}</h1>
-                <h1>Due Date: {item.newTask.taskDueDate}</h1>
-                <h1>Task ID: {item.newTask.taskID}</h1>
-                <img onClick={() => modifyTask(item.newTask.taskID) + toggleModifyRecordPopup()} src={item.newTask.updateIcon} alt='Failed to load'></img>
-                <img onClick={() => deleteTask(item.newTask.taskID)} src={item.newTask.deleteIcon} alt='Failed to load'></img>
+                
+                <div className='grid-item-one'><h1>Task Name: {item.newTask.taskName}</h1></div>
+                <div className='grid-item-two'><h1>Priority: {item.newTask.taskPriority}</h1></div>
+                <div className='grid-item-three'><h1>Details: {item.newTask.taskDescription}</h1></div>
+                <div className='grid-item-four'><h1>Due Date: {item.newTask.taskDueDate}</h1></div>
+                <div className='grid-item-five'><h1>Task ID: {item.newTask.taskID}</h1></div>
+                <div className='grid-item-six'><h3>Edit Task</h3><img onClick={() => modifyTask(item.newTask.taskID) + toggleModifyRecordPopup()} src={item.newTask.updateIcon} alt='Failed to load'></img></div>
+                <div className='grid-item-seven'><h3>Delete Task</h3><img onClick={() => deleteTask(item.newTask.taskID)} src={item.newTask.deleteIcon} alt='Failed to load'></img></div>
               </div>
             )
           })}
