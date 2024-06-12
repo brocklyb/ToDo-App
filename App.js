@@ -123,7 +123,7 @@ function App() {
 
     //removes the updated task from the array
     let newAllTasks = allTasks.filter((item, index) => {return item.newTask.taskID !== taskID})
-
+    console.log(newAllTasks)
     let newAllTasksArray = []
 
     newAllTasks.map((item) => newAllTasksArray.push(item))
