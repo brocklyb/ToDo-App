@@ -68,7 +68,7 @@ function App() {
     }
   }
 
-  const filterDataInPlace = (taskID, originalTaskPosition, newAllTasksArray) =>{
+  const filterDataInPlace = (originalTaskPosition, newAllTasksArray) =>{
     let filteredData = []
     let taskToUpdate = newAllTasksArray[newAllTasksArray.length -1]
     for(let i = 0; i<newAllTasksArray.length; i++){
@@ -97,6 +97,7 @@ function App() {
   //saves
   const [ selectedTask, setSelectedTask ] = useState()
   const modifyTask = (taskID) =>{
+    //console.log(selectedTask)
     let findTask = allTasks.findIndex((value) => locateTask(value, taskID));
     setSelectedTask(allTasks[findTask])
     //console.log(allTasks[findTask])
@@ -106,6 +107,7 @@ function App() {
   const findTaskInArray = (taskID) =>{
     return allTasks.findIndex((value) => locateTask(value, taskID));
   }
+
 
   const updateTask = (taskID) =>{
    
@@ -118,23 +120,27 @@ function App() {
 
     let originalTaskPosition = findTaskInArray(taskID)
 
-
-    let modifiedNewTask = {taskName, taskPriority, taskDescription, taskDueDate, taskID, updateIcon, deleteIcon, isTaskComplete, originalTaskPosition}
-
-    //removes the updated task from the array
-    let newAllTasks = allTasks.filter((item, index) => {return item.newTask.taskID !== taskID})
-    console.log(newAllTasks)
-    let newAllTasksArray = []
-
-    newAllTasks.map((item) => newAllTasksArray.push(item))
-
-    newAllTasksArray.push({newTask: modifiedNewTask})
-    
-    let filteredData = filterDataInPlace(taskID, originalTaskPosition, newAllTasksArray)
-    console.log(filteredData)
-
-    setTasks(filteredData)
-    
+    const updatedTasks = allTasks.map((task, index) => {
+      if (index === originalTaskPosition) {
+        return {
+          ...task,
+          newTask: {
+            ...task.newTask,
+            taskID,
+            taskName,
+            taskPriority,
+            taskDescription,
+            taskDueDate,
+            isTaskComplete
+          }
+        };
+      }
+      return task;
+    });
+  
+    // Update the state
+    setAllTasks(updatedTasks);
+  
     toggleModifyRecordPopup()
   }
 
@@ -177,7 +183,7 @@ function App() {
       </dialog>
       <div id='grid-container'>
         <div id='left-content'>
-          <h1>Left Side</h1>
+          <h1>Create a Task</h1>
           <form id='left-form'>
             <input id='task-name' placeholder='Task Name'></input>
             <label/>Priority<select id="task-priority">
@@ -195,7 +201,6 @@ function App() {
 
         <div id='right-content'>
           <div id='filter-buttons-container'>
-            <h1>Right Side</h1>
             <div id='filter-buttons'>
               <p><b>Filter by:</b></p>
               <button>Priority</button>
