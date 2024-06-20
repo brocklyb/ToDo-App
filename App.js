@@ -87,11 +87,7 @@ function App() {
   //returns a number indicating the position for refernce
   const locateTask = (value, taskID) =>{
     return value.newTask.taskID === taskID;
-  }
-
-
-
-  
+  }  
 
   //this usestate stores the selected task that is potentially being modified
   //saves
@@ -108,16 +104,37 @@ function App() {
     return allTasks.findIndex((value) => locateTask(value, taskID));
   }
 
+  const [ sortOrder, setSortOrder ] = useState(1)
+  const filterByPriority = () =>{  
+    if(sortOrder === 1){
+      let filteredData = allTasks.sort((a, b) => {return a.newTask.taskID - b.newTask.taskID})
+      setAllTasks([...filteredData])
+    }else{
+      let filteredData = allTasks.sort((a, b) => {return b.newTask.taskID - a.newTask.taskID})
+      setAllTasks([...filteredData])
+    }
+    setSortOrder(-sortOrder)
+  }
+
+  const filterByDate = () =>{  
+    //console.log(typeof(allTasks[0].newTask.taskDueDate))
+    if(sortOrder === 1){
+      let filteredData = allTasks.sort((a, b) => {return a.newTask.taskDueDate.replace(/-/g,"") - b.newTask.taskDueDate.replace(/-/g,"")})
+      setAllTasks([...filteredData])
+    }else{
+      let filteredData = allTasks.sort((a, b) => {return b.newTask.taskDueDate.replace(/-/g,"") - a.newTask.taskDueDate.replace(/-/g,"")})
+      setAllTasks([...filteredData])
+    }
+    setSortOrder(-sortOrder)
+  }
+
 
   const updateTask = (taskID) =>{
-   
     let taskName = document.getElementById("task-name").value
     let taskPriority = document.getElementById("task-priority").value
     let taskDescription = document.getElementById("task-description").value
     let taskDueDate = document.getElementById("task-due-date").value
     let isTaskComplete = document.getElementById("task-isComplete").value
-
-
     let originalTaskPosition = findTaskInArray(taskID)
 
     const updatedTasks = allTasks.map((task, index) => {
@@ -140,7 +157,6 @@ function App() {
   
     // Update the state
     setAllTasks(updatedTasks);
-  
     toggleModifyRecordPopup()
   }
 
@@ -202,9 +218,9 @@ function App() {
         <div id='right-content'>
           <div id='filter-buttons-container'>
             <div id='filter-buttons'>
-              <p><b>Filter by:</b></p>
-              <button>Priority</button>
-              <button>Due Date</button>
+              <h1><b>Filter by:</b></h1>
+              <button onClick={filterByPriority}>Priority</button>
+              <button onClick={filterByDate}>Due Date</button>
             </div>
           </div>
           
