@@ -18,6 +18,14 @@ function App() {
     let taskDueDate = document.getElementById("task-dueDate").value
     let taskID = taskPriority + (Math.floor(Math.random() * 900) + 100) 
     createNewTask({taskName,taskPriority,taskDescription,taskDueDate, taskID, updateIcon, deleteIcon, isComplete: false})
+    clearFields()
+  }
+
+  const clearFields = () =>{
+    document.getElementById("task-name").value = ""
+    document.getElementById("task-priority").value = ""
+    document.getElementById("task-description").value = ""
+    document.getElementById("task-dueDate").value = ""
   }
 
   const createNewTask = (newTask) =>{
